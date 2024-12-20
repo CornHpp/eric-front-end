@@ -1,7 +1,9 @@
 import React, { useState, useRef, useEffect } from "react";
-import { MessageBox, Input, Button, MessageType } from "react-chat-elements";
+import { Input } from "react-chat-elements";
 import "react-chat-elements/dist/main.css";
-
+import GlowButton from "../GlowButton";
+import { ArrowUp } from "lucide-react";
+import Message from "./Message";
 interface ChatMessage {
   position: "left" | "right";
   type: "text";
@@ -45,39 +47,13 @@ export const ChatInterface: React.FC = () => {
     }
   };
 
-  const messageBoxProps = {
-    focus: false,
-    titleColor: "#fff",
-    forwarded: false,
-    status: "sent" as const,
-    notch: true,
-    removeButton: false,
-    retracted: false,
-    replyButton: false,
-    reply: false,
-    toJSON: () => ({}),
-    onReplyClick: () => {},
-    onRemoveClick: () => {},
-    onTitleClick: () => {},
-    onForwardClick: () => {},
-    onReplyMessageClick: () => {},
-    onAvatarClick: () => {},
-    // 添加其他必需的属性...
-  };
-
   return (
-    <div className="flex flex-col flex-1 bg-[#111919]">
-      <div className="flex-1 overflow-y-auto">
+    <div className="flex flex-col flex-1 ">
+      <div className=" overflow-y-auto h-[521px] hide-scrollbar">
         {messages.map((message, index) => (
-          <MessageBox
-            key={index}
-            id={index.toString()}
-            position={message.position}
-            type={message.type}
+          <Message
             text={message.text}
-            date={message.date}
-            title={message.title}
-            {...messageBoxProps}
+            isResponse={message.position === "left"}
           />
         ))}
         <div ref={messagesEndRef} />
@@ -91,14 +67,14 @@ export const ChatInterface: React.FC = () => {
           }
           multiline={false}
           maxHeight={100}
-          className="bg-[#1c2121] text-white rounded-xl border-[#323737]"
+          className="w-[443px] h-[42px] rounded-[12px] bg-[#1b2121] border border-[#323737] "
           rightButtons={
-            <Button
-              text="Send"
+            <GlowButton
               onClick={handleSend}
-              title="Send"
-              className="bg-[#00FFD1] text-black rounded-xl px-4 py-2 hover:shadow-[0_0_20px_rgba(0,255,209,0.4)]"
-            />
+              className="w-[34px] h-[34px] rounded-[12px]"
+            >
+              <ArrowUp className="text-[#000606]" />
+            </GlowButton>
           }
         />
       </div>
@@ -107,8 +83,13 @@ export const ChatInterface: React.FC = () => {
 };
 
 const CustomStyles = `
+.rce-container-input{
+  background: #1b2121 !important;
+  border: 1px solid #323737 !important;
+}
   .rce-container-mbox {
     background: transparent;
+ 
   }
   
   .rce-mbox {
@@ -134,12 +115,13 @@ const CustomStyles = `
   }
   
   .rce-input {
-    background: #1c2121 !important;
     border-color: #323737 !important;
+    padding-left: 16px !important;
+    color: #fff !important;
   }
   
   .rce-input::placeholder {
-    color: #767a7a;
+    color: #777a7a;
   }
 
   .rce-mbox-left:before {
